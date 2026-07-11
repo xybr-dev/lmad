@@ -9,8 +9,6 @@ use Lmad\Mcp\LmadServer;
 use Lmad\Mcp\Tools\GetResponseSchema;
 use Lmad\Tests\TestCase;
 
-uses(TestCase::class);
-
 class TestController
 {
     public function index(): array

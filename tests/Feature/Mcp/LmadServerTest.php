@@ -7,8 +7,6 @@ namespace Lmad\Tests\Feature\Mcp;
 use Lmad\Mcp\LmadServer;
 use Lmad\Tests\TestCase;
 
-uses(TestCase::class);
-
 it('has correct server name', function () {
     expect(LmadServer::name())->toBe('LMAD API Discovery');
 });
