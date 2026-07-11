@@ -7,9 +7,10 @@ namespace Lmad\Tests\Feature\Mcp;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Route;
-use Lmad\Mcp\LmadServer;
+use Laravel\Mcp\Request;
+use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Lmad\Mcp\Tools\AnalyzeEndpoint;
-use Lmad\Tests\TestCase;
 
 class AnalyzeTestFormRequest extends FormRequest
 {
@@ -52,66 +53,71 @@ beforeEach(function () {
 });
 
 it('analyzes endpoint completely', function () {
-    $response = LmadServer::tool(AnalyzeEndpoint::class, [
+    $result = app(AnalyzeEndpoint::class)->handle(new Request([
         'uri' => 'api/analyze-test',
         'method' => 'POST',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('endpoint.uri', 'api/analyze-test');
-    $response->assertJsonPath('endpoint.method', 'POST');
-    $response->assertJsonPath('route.uri', 'api/analyze-test');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['endpoint']['uri'])->toBe('api/analyze-test');
+    expect($content['endpoint']['method'])->toBe('POST');
+    expect($content['route']['uri'])->toBe('api/analyze-test');
 });
 
 it('includes controller information', function () {
-    $response = LmadServer::tool(AnalyzeEndpoint::class, [
+    $result = app(AnalyzeEndpoint::class)->handle(new Request([
         'uri' => 'api/analyze-test',
         'method' => 'POST',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('controller.class', AnalyzeTestController::class);
-    $response->assertJsonPath('controller.method', 'store');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['controller']['class'])->toBe(AnalyzeTestController::class);
+    expect($content['controller']['method'])->toBe('store');
 });
 
 it('includes request validation', function () {
-    $response = LmadServer::tool(AnalyzeEndpoint::class, [
+    $result = app(AnalyzeEndpoint::class)->handle(new Request([
         'uri' => 'api/analyze-test',
         'method' => 'POST',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('request.class', AnalyzeTestFormRequest::class);
-    $response->assertJsonCount(2, 'request.rules');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['request']['class'])->toBe('\\'.AnalyzeTestFormRequest::class);
+    expect($content['request']['rules'])->toHaveCount(2);
 });
 
 it('includes response schema', function () {
-    $response = LmadServer::tool(AnalyzeEndpoint::class, [
+    $result = app(AnalyzeEndpoint::class)->handle(new Request([
         'uri' => 'api/analyze-test',
         'method' => 'POST',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('response.type', 'json_resource');
-    $response->assertJsonPath('response.class', AnalyzeTestResource::class);
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['response']['return_type'])->toBe('\\'.AnalyzeTestResource::class);
 });
 
 it('includes example usage', function () {
-    $response = LmadServer::tool(AnalyzeEndpoint::class, [
+    $result = app(AnalyzeEndpoint::class)->handle(new Request([
         'uri' => 'api/analyze-test',
         'method' => 'POST',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('example.http_method', 'POST');
-    $response->assertJsonPath('example.uri', 'api/analyze-test');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['example']['http_method'])->toBe('POST');
+    expect($content['example']['uri'])->toBe('api/analyze-test');
 });
 
 it('returns error for non-existent route', function () {
-    $response = LmadServer::tool(AnalyzeEndpoint::class, [
+    $result = app(AnalyzeEndpoint::class)->handle(new Request([
         'uri' => 'nonexistent',
         'method' => 'GET',
-    ]);
+    ]));
 
-    $response->assertHasErrors();
+    expect($result)->toBeInstanceOf(Response::class);
+    expect($result->isError())->toBeTrue();
 });

@@ -5,37 +5,41 @@ declare(strict_types=1);
 namespace Lmad\Tests\Feature\Mcp;
 
 use Illuminate\Support\Facades\Route;
-use Lmad\Mcp\LmadServer;
+use Laravel\Mcp\Request;
+use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Lmad\Mcp\Tools\GetRouteDetails;
-use Lmad\Tests\TestCase;
 
 beforeEach(function () {
     Route::get('/api/test', fn () => response()->json(['ok' => true]))->name('api.test');
 });
 
 it('gets route details', function () {
-    $response = LmadServer::tool(GetRouteDetails::class, [
+    $result = app(GetRouteDetails::class)->handle(new Request([
         'uri' => 'api/test',
         'method' => 'GET',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('route.uri', 'api/test');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['route']['uri'])->toBe('api/test');
 });
 
 it('returns error for non-existent route', function () {
-    $response = LmadServer::tool(GetRouteDetails::class, [
+    $result = app(GetRouteDetails::class)->handle(new Request([
         'uri' => 'nonexistent',
         'method' => 'GET',
-    ]);
+    ]));
 
-    $response->assertHasErrors();
+    expect($result)->toBeInstanceOf(Response::class);
+    expect($result->isError())->toBeTrue();
 });
 
 it('validates required parameters', function () {
-    $response = LmadServer::tool(GetRouteDetails::class, [
+    $result = app(GetRouteDetails::class)->handle(new Request([
         'method' => 'GET',
-    ]);
+    ]));
 
-    $response->assertHasErrors();
+    expect($result)->toBeInstanceOf(Response::class);
+    expect($result->isError())->toBeTrue();
 });

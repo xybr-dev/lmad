@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Lmad\Tests\Feature\Mcp;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Lmad\Mcp\LmadServer;
+use Laravel\Mcp\Request;
+use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Lmad\Mcp\Tools\GetResponseSchema;
-use Lmad\Tests\TestCase;
 
 class TestController
 {
@@ -34,41 +35,44 @@ class TestResource extends JsonResource
 }
 
 it('gets response schema for array return', function () {
-    $response = LmadServer::tool(GetResponseSchema::class, [
+    $result = app(GetResponseSchema::class)->handle(new Request([
         'controller_class' => TestController::class,
         'method' => 'index',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('controller', TestController::class);
-    $response->assertJsonPath('method', 'index');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['controller'])->toBe(TestController::class);
+    expect($content['method'])->toBe('index');
 });
 
 it('gets response schema for json resource', function () {
-    $response = LmadServer::tool(GetResponseSchema::class, [
+    $result = app(GetResponseSchema::class)->handle(new Request([
         'controller_class' => TestController::class,
         'method' => 'show',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('response.type', 'json_resource');
-    $response->assertJsonPath('response.class', TestResource::class);
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['response']['return_type'])->toBe('\\'.TestResource::class);
 });
 
 it('returns error for non-existent controller', function () {
-    $response = LmadServer::tool(GetResponseSchema::class, [
+    $result = app(GetResponseSchema::class)->handle(new Request([
         'controller_class' => 'NonExistentController',
         'method' => 'index',
-    ]);
+    ]));
 
-    $response->assertHasErrors();
+    expect($result)->toBeInstanceOf(Response::class);
+    expect($result->isError())->toBeTrue();
 });
 
 it('returns error for non-existent method', function () {
-    $response = LmadServer::tool(GetResponseSchema::class, [
+    $result = app(GetResponseSchema::class)->handle(new Request([
         'controller_class' => TestController::class,
         'method' => 'nonExistent',
-    ]);
+    ]));
 
-    $response->assertHasErrors();
+    expect($result)->toBeInstanceOf(Response::class);
+    expect($result->isError())->toBeTrue();
 });
