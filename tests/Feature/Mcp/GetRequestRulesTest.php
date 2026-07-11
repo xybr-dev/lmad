@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Lmad\Tests\Feature\Mcp;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Lmad\Mcp\LmadServer;
+use Laravel\Mcp\Request;
+use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Lmad\Mcp\Tools\GetRequestRules;
-use Lmad\Tests\TestCase;
 
 class TestFormRequest extends FormRequest
 {
@@ -33,29 +34,32 @@ class TestFormRequest extends FormRequest
 }
 
 it('gets request rules', function () {
-    $response = LmadServer::tool(GetRequestRules::class, [
+    $result = app(GetRequestRules::class)->handle(new Request([
         'request_class' => TestFormRequest::class,
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('class', TestFormRequest::class);
-    $response->assertJsonCount(2, 'rules');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['class'])->toBe(TestFormRequest::class);
+    expect($content['rules'])->toHaveCount(2);
 });
 
 it('returns error for non-existent request class', function () {
-    $response = LmadServer::tool(GetRequestRules::class, [
+    $result = app(GetRequestRules::class)->handle(new Request([
         'request_class' => 'NonExistentRequest',
-    ]);
+    ]));
 
-    $response->assertHasErrors();
+    expect($result)->toBeInstanceOf(Response::class);
+    expect($result->isError())->toBeTrue();
 });
 
 it('includes authorization info', function () {
-    $response = LmadServer::tool(GetRequestRules::class, [
+    $result = app(GetRequestRules::class)->handle(new Request([
         'request_class' => TestFormRequest::class,
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertJsonPath('authorization.has_authorize', true);
-    $response->assertJsonPath('authorization.authorized', true);
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['authorization']['has_authorize'])->toBeTrue();
+    expect($content['authorization']['authorized'])->toBeTrue();
 });

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lmad\Tests\Feature\Mcp;
 
 use Illuminate\Support\Facades\Route;
-use Lmad\Mcp\LmadServer;
+use Laravel\Mcp\Request;
+use Laravel\Mcp\ResponseFactory;
 use Lmad\Mcp\Tools\ListApiRoutes;
-use Lmad\Tests\TestCase;
 
 beforeEach(function () {
     Route::get('/api/test', fn () => response()->json(['ok' => true]))->name('api.test');
@@ -15,34 +15,40 @@ beforeEach(function () {
 });
 
 it('lists all api routes', function () {
-    $response = LmadServer::tool(ListApiRoutes::class, []);
+    $result = app(ListApiRoutes::class)->handle(new Request([]));
 
-    $response->assertOk();
-    $response->assertSee('count');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content)->toHaveKey('count');
 });
 
 it('filters routes by path', function () {
-    $response = LmadServer::tool(ListApiRoutes::class, [
+    $result = app(ListApiRoutes::class)->handle(new Request([
         'path' => 'api/users',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertSee('api/users');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['count'])->toBeGreaterThanOrEqual(1);
+    expect(collect($content['routes'])->pluck('uri'))->toContain('api/users');
 });
 
 it('filters routes by method', function () {
-    $response = LmadServer::tool(ListApiRoutes::class, [
+    $result = app(ListApiRoutes::class)->handle(new Request([
         'method' => 'GET',
-    ]);
+    ]));
 
-    $response->assertOk();
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['count'])->toBeGreaterThanOrEqual(1);
 });
 
 it('returns empty array when no routes match', function () {
-    $response = LmadServer::tool(ListApiRoutes::class, [
+    $result = app(ListApiRoutes::class)->handle(new Request([
         'path' => 'nonexistent',
-    ]);
+    ]));
 
-    $response->assertOk();
-    $response->assertSee('0');
+    expect($result)->toBeInstanceOf(ResponseFactory::class);
+    $content = $result->getStructuredContent();
+    expect($content['count'])->toBe(0);
 });

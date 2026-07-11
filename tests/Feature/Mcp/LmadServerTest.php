@@ -5,43 +5,57 @@ declare(strict_types=1);
 namespace Lmad\Tests\Feature\Mcp;
 
 use Lmad\Mcp\LmadServer;
-use Lmad\Tests\TestCase;
+use Lmad\Mcp\Resources\ApiRoutesResource;
+use Lmad\Mcp\Resources\ControllerResource;
+use Lmad\Mcp\Tools\AnalyzeEndpoint;
+use Lmad\Mcp\Tools\GetRequestRules;
+use Lmad\Mcp\Tools\GetResponseSchema;
+use Lmad\Mcp\Tools\GetRouteDetails;
+use Lmad\Mcp\Tools\ListApiRoutes;
 
 it('has correct server name', function () {
-    expect(LmadServer::name())->toBe('LMAD API Discovery');
+    $defaults = (new \ReflectionClass(LmadServer::class))->getDefaultProperties();
+
+    expect($defaults['name'])->toBe('LMAD API Discovery');
 });
 
 it('has correct version', function () {
-    expect(LmadServer::version())->toBe('1.0.0');
+    $defaults = (new \ReflectionClass(LmadServer::class))->getDefaultProperties();
+
+    expect($defaults['version'])->toBe('1.0.0');
 });
 
 it('has description', function () {
-    expect(LmadServer::description())->not->toBeEmpty();
+    $defaults = (new \ReflectionClass(LmadServer::class))->getDefaultProperties();
+
+    expect($defaults['description'])->not->toBeEmpty();
 });
 
 it('has instructions', function () {
-    expect(LmadServer::instructions())->not->toBeEmpty();
+    $defaults = (new \ReflectionClass(LmadServer::class))->getDefaultProperties();
+
+    expect($defaults['instructions'])->not->toBeEmpty();
 });
 
 it('registers all tools', function () {
-    $tools = LmadServer::tools();
+    $defaults = (new \ReflectionClass(LmadServer::class))->getDefaultProperties();
 
-    expect($tools)->toHaveCount(5);
-    expect($tools)->toContain(
-        'Lmad\\Mcp\\Tools\\ListApiRoutes',
-        'Lmad\\Mcp\\Tools\\GetRouteDetails',
-        'Lmad\\Mcp\\Tools\\GetRequestRules',
-        'Lmad\\Mcp\\Tools\\GetResponseSchema',
-        'Lmad\\Mcp\\Tools\\AnalyzeEndpoint',
+    expect($defaults['tools'])->toHaveCount(5);
+    expect($defaults['tools'])->toContain(
+        ListApiRoutes::class,
+        GetRouteDetails::class,
+        GetRequestRules::class,
+        GetResponseSchema::class,
+        AnalyzeEndpoint::class,
     );
 });
 
 it('registers all resources', function () {
-    $resources = LmadServer::resources();
+    $defaults = (new \ReflectionClass(LmadServer::class))->getDefaultProperties();
 
-    expect($resources)->toHaveCount(2);
-    expect($resources)->toContain(
-        'Lmad\\Mcp\\Resources\\ApiRoutesResource',
-        'Lmad\\Mcp\\Resources\\ControllerResource',
+    expect($defaults['resources'])->toHaveCount(2);
+    expect($defaults['resources'])->toContain(
+        ApiRoutesResource::class,
+        ControllerResource::class,
     );
 });
