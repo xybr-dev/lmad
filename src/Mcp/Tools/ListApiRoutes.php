@@ -68,8 +68,8 @@ final class ListApiRoutes extends Tool
     /**
      * Handles the MCP request.
      *
-     * @param  \Laravel\Mcp\Request  $request  MCP request
-     * @return \Laravel\Mcp\Response|\Laravel\Mcp\ResponseFactory Route list
+     * @param  Request  $request  MCP request
+     * @return Response|ResponseFactory Route list
      */
     public function handle(Request $request): Response|ResponseFactory
     {
@@ -88,7 +88,7 @@ final class ListApiRoutes extends Tool
      *
      * Filters out null or empty values.
      *
-     * @param  \Laravel\Mcp\Request  $request  MCP request
+     * @param  Request  $request  MCP request
      * @return array{path?: string, method?: string, domain?: string, except_vendor?: bool, only_vendor?: bool}
      */
     private function parseFilters(Request $request): array

@@ -41,8 +41,8 @@ final class ApiRoutesResource extends Resource
      *
      * Returns the route if URI is provided, otherwise returns the full route list.
      *
-     * @param  \Laravel\Mcp\Request  $request  MCP request
-     * @return \Laravel\Mcp\Response|\Laravel\Mcp\ResponseFactory Route information or error
+     * @param  Request  $request  MCP request
+     * @return Response|ResponseFactory Route information or error
      */
     public function handle(Request $request): Response|ResponseFactory
     {

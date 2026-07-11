@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lmad;
 
 use Illuminate\Support\ServiceProvider;
-use Lmad\Mcp\LmadServer;
 use Lmad\Mcp\Schema\ControllerInspector;
 use Lmad\Mcp\Schema\RequestInspector;
 use Lmad\Mcp\Schema\ResponseInspector;

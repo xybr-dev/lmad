@@ -41,7 +41,7 @@ final class RouteCollection
      *
      * @param  string  $uri  Route URI (e.g., "api/users")
      * @param  string  $method  HTTP method (e.g., "GET", "POST")
-     * @return \Illuminate\Routing\Route|null Route object or null if not found
+     * @return Route|null Route object or null if not found
      */
     public static function findByUriAndMethod(string $uri, string $method): ?Route
     {
@@ -54,7 +54,7 @@ final class RouteCollection
      * Finds a route by name.
      *
      * @param  string  $name  Route name (named route)
-     * @return \Illuminate\Routing\Route|null Route object or null if not found
+     * @return Route|null Route object or null if not found
      */
     public static function findByName(string $name): ?Route
     {
@@ -64,7 +64,7 @@ final class RouteCollection
     /**
      * Checks if a route matches the filter criteria.
      *
-     * @param  \Illuminate\Routing\Route  $route  Route to check
+     * @param  Route  $route  Route to check
      * @param  array{path?: string, method?: string, domain?: string, except_vendor?: bool, only_vendor?: bool}  $filters  Filter criteria
      * @return bool True if matches filters
      */
@@ -115,7 +115,7 @@ final class RouteCollection
      * Considered a vendor route if the controller namespace contains
      * "Vendor", "Laravel\", or "Illuminate\".
      *
-     * @param  \Illuminate\Routing\Route  $route  Route to check
+     * @param  Route  $route  Route to check
      * @return bool True if vendor route
      */
     private static function isVendorRoute(Route $route): bool
@@ -140,7 +140,7 @@ final class RouteCollection
      *
      * Converts route information to array format.
      *
-     * @param  \Illuminate\Routing\Route  $route  Route object
+     * @param  Route  $route  Route object
      * @return array{uri: string, methods: array, name: string|null, domain: string, controller: string|null, action: array, middleware: array, wheres: array, parameters: array}
      */
     private static function serializeRoute(Route $route): array

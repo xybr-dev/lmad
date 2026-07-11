@@ -155,7 +155,7 @@ final class ReflectionHelper
      *
      * Union types are merged, named types are normalized.
      *
-     * @param  \ReflectionType|null  $type  Reflection type object
+     * @param  ReflectionType|null  $type  Reflection type object
      * @return string|null Type name or null
      */
     private static function getTypeName(?ReflectionType $type): ?string

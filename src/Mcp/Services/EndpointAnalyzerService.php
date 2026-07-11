@@ -10,7 +10,6 @@ use Lmad\Mcp\Schema\ControllerInspector;
 use Lmad\Mcp\Schema\RequestInspector;
 use Lmad\Mcp\Schema\ResponseInspector;
 use Lmad\Mcp\Schema\RouteParser;
-use Lmad\Support\ReflectionHelper;
 
 /**
  * Service for comprehensive API endpoint analysis.
@@ -36,7 +35,7 @@ final class EndpointAnalyzerService
      *
      * @param  string  $uri  Endpoint URI (e.g., "api/users")
      * @param  string  $method  HTTP method (e.g., "GET", "POST")
-     * @return \Laravel\Mcp\Response|\Laravel\Mcp\ResponseFactory Analysis results or error
+     * @return Response|ResponseFactory Analysis results or error
      */
     public function analyze(string $uri, string $method): Response|ResponseFactory
     {
