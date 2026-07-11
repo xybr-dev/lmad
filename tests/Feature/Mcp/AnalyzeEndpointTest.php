@@ -11,8 +11,6 @@ use Lmad\Mcp\LmadServer;
 use Lmad\Mcp\Tools\AnalyzeEndpoint;
 use Lmad\Tests\TestCase;
 
-uses(TestCase::class);
-
 class AnalyzeTestFormRequest extends FormRequest
 {
     public function rules(): array

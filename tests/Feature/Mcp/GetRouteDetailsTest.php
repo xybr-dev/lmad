@@ -9,8 +9,6 @@ use Lmad\Mcp\LmadServer;
 use Lmad\Mcp\Tools\GetRouteDetails;
 use Lmad\Tests\TestCase;
 
-uses(TestCase::class);
-
 beforeEach(function () {
     Route::get('/api/test', fn () => response()->json(['ok' => true]))->name('api.test');
 });

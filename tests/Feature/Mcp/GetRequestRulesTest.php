@@ -9,8 +9,6 @@ use Lmad\Mcp\LmadServer;
 use Lmad\Mcp\Tools\GetRequestRules;
 use Lmad\Tests\TestCase;
 
-uses(TestCase::class);
-
 class TestFormRequest extends FormRequest
 {
     public function rules(): array

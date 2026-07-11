@@ -9,8 +9,6 @@ use Lmad\Mcp\LmadServer;
 use Lmad\Mcp\Tools\ListApiRoutes;
 use Lmad\Tests\TestCase;
 
-uses(TestCase::class);
-
 beforeEach(function () {
     Route::get('/api/test', fn () => response()->json(['ok' => true]))->name('api.test');
     Route::post('/api/users', fn () => response()->json(['created' => true]))->name('api.users.store');
