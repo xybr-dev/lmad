@@ -32,18 +32,8 @@ final class GetResponseSchema extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'type' => 'object',
-            'properties' => [
-                'controller_class' => [
-                    'type' => 'string',
-                    'description' => 'Full controller class name (e.g., App\\Http\\Controllers\\UserController)',
-                ],
-                'method' => [
-                    'type' => 'string',
-                    'description' => 'Controller method name (e.g., index, store, show, update, destroy)',
-                ],
-            ],
-            'required' => ['controller_class', 'method'],
+            'controller_class' => $schema->string()->description('Full controller class name (e.g., App\\Http\\Controllers\\UserController)')->required(),
+            'method' => $schema->string()->description('Controller method name (e.g., index, store, show, update, destroy)')->required(),
         ];
     }
 

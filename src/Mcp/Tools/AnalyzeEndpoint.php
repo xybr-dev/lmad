@@ -33,19 +33,8 @@ final class AnalyzeEndpoint extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'type' => 'object',
-            'properties' => [
-                'uri' => [
-                    'type' => 'string',
-                    'description' => 'The route URI pattern (e.g., \'api/users/{id}\')',
-                ],
-                'method' => [
-                    'type' => 'string',
-                    'description' => 'The HTTP method',
-                    'enum' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-                ],
-            ],
-            'required' => ['uri', 'method'],
+            'uri' => $schema->string()->description('The route URI pattern (e.g., \'api/users/{id}\')')->required(),
+            'method' => $schema->string()->description('The HTTP method')->enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'])->required(),
         ];
     }
 

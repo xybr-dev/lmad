@@ -33,14 +33,7 @@ final class GetRequestRules extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'type' => 'object',
-            'properties' => [
-                'request_class' => [
-                    'type' => 'string',
-                    'description' => 'Full FormRequest class name (e.g., App\\Http\\Requests\\StoreUserRequest)',
-                ],
-            ],
-            'required' => ['request_class'],
+            'request_class' => $schema->string()->description('Full FormRequest class name (e.g., App\\Http\\Requests\\StoreUserRequest)')->required(),
         ];
     }
 

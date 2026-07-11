@@ -32,30 +32,11 @@ final class ListApiRoutes extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'type' => 'object',
-            'properties' => [
-                'path' => [
-                    'type' => 'string',
-                    'description' => 'Filter routes by URI pattern (supports wildcards, e.g., \'api/users*\')',
-                ],
-                'method' => [
-                    'type' => 'string',
-                    'description' => 'Filter by HTTP method (GET, POST, PUT, PATCH, DELETE)',
-                    'enum' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-                ],
-                'domain' => [
-                    'type' => 'string',
-                    'description' => 'Filter by domain',
-                ],
-                'except_vendor' => [
-                    'type' => 'boolean',
-                    'description' => 'Exclude vendor/Laravel framework routes',
-                ],
-                'only_vendor' => [
-                    'type' => 'boolean',
-                    'description' => 'Only show vendor/Laravel framework routes',
-                ],
-            ],
+            'path' => $schema->string()->description('Filter routes by URI pattern (supports wildcards, e.g., \'api/users*\')'),
+            'method' => $schema->string()->description('Filter by HTTP method (GET, POST, PUT, PATCH, DELETE)')->enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS']),
+            'domain' => $schema->string()->description('Filter by domain'),
+            'except_vendor' => $schema->boolean()->description('Exclude vendor/Laravel framework routes'),
+            'only_vendor' => $schema->boolean()->description('Only show vendor/Laravel framework routes'),
         ];
     }
 
