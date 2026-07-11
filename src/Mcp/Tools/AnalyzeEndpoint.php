@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace Lmad\Mcp\Tools;
 
+use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
-use Lmad\Mcp\Schema\ControllerInspector;
-use Lmad\Mcp\Schema\RequestInspector;
-use Lmad\Mcp\Schema\ResponseInspector;
-use Lmad\Mcp\Schema\RouteParser;
 use Lmad\Mcp\Services\EndpointAnalyzerService;
-
-use Illuminate\Contracts\JsonSchema\JsonSchema;
 
 /**
  * MCP Tool for comprehensive endpoint analysis.
@@ -67,8 +62,8 @@ final class AnalyzeEndpoint extends Tool
     /**
      * Handles the MCP request.
      *
-     * @param  \Laravel\Mcp\Request  $request  MCP request
-     * @return \Laravel\Mcp\Response|\Laravel\Mcp\ResponseFactory Analysis results or error
+     * @param  Request  $request  MCP request
+     * @return Response|ResponseFactory Analysis results or error
      */
     public function handle(Request $request): Response|ResponseFactory
     {

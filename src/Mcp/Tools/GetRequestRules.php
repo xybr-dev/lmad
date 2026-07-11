@@ -57,8 +57,8 @@ final class GetRequestRules extends Tool
     /**
      * Handles the MCP request.
      *
-     * @param  \Laravel\Mcp\Request  $request  MCP request
-     * @return \Laravel\Mcp\Response|\Laravel\Mcp\ResponseFactory Validation rules or error
+     * @param  Request  $request  MCP request
+     * @return Response|ResponseFactory Validation rules or error
      */
     public function handle(Request $request): Response|ResponseFactory
     {

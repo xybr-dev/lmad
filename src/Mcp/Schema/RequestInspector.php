@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lmad\Mcp\Schema;
 
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Validation\Rule as RuleContract;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Lmad\Support\ReflectionHelper;
@@ -237,7 +238,7 @@ final class RequestInspector
     /**
      * Parses a RuleContract implementation.
      *
-     * @param  \Illuminate\Contracts\Validation\Rule  $rule  Rule object
+     * @param  Rule  $rule  Rule object
      * @return array{rule: string, class: class-string}
      */
     private function parseRuleObject(RuleContract $rule): array
@@ -251,7 +252,7 @@ final class RequestInspector
     /**
      * Parses a ValidationRule implementation.
      *
-     * @param  \Illuminate\Contracts\Validation\ValidationRule  $rule  ValidationRule object
+     * @param  ValidationRule  $rule  ValidationRule object
      * @return array{rule: string, class: class-string}
      */
     private function parseValidationRule(ValidationRule $rule): array

@@ -46,8 +46,8 @@ final class ControllerResource extends Resource
      * Returns method details if method is provided, otherwise returns the
      * list of all public methods in the class.
      *
-     * @param  \Laravel\Mcp\Request  $request  MCP request
-     * @return \Laravel\Mcp\Response|\Laravel\Mcp\ResponseFactory Controller information or error
+     * @param  Request  $request  MCP request
+     * @return Response|ResponseFactory Controller information or error
      */
     public function handle(Request $request): Response|ResponseFactory
     {
@@ -81,7 +81,7 @@ final class ControllerResource extends Resource
      * Returns all public methods except magic methods (__construct, __destruct, etc.).
      *
      * @param  string  $class  Controller class name
-     * @return \Laravel\Mcp\Response|\Laravel\Mcp\ResponseFactory Method list or error
+     * @return Response|ResponseFactory Method list or error
      */
     private function listControllerMethods(string $class): Response|ResponseFactory
     {
